@@ -1,0 +1,25 @@
+{
+  "name": "spotify-clone",
+  "version": "1.0.0",
+  "description": "A Spotify-inspired project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tanmay2512-clouds/Spotify-Clone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Tanmay2512-clouds/Spotify-Clone/issues"
+  },
+  "homepage": "https://github.com/Tanmay2512-clouds/Spotify-Clone#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.9.5"
+  }
+}
