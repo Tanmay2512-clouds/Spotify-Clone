@@ -50,6 +50,12 @@ async function registerUser(req, res) {
 
 async function loginUser(req,res){
     const {username,email,password} = req.body;
+
+    const user = await userModel.findOne({
+        $or:{
+            
+        }
+    })
 }
 
 module.exports = { registerUser };
