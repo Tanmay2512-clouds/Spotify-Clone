@@ -15,3 +15,5 @@ const musicSchema = new mongoose.Schema({
         required:true
     }
 })
+
+const musicModel = mongoose.model("music",musicSchema)
