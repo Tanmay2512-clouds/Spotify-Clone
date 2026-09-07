@@ -52,10 +52,19 @@ async function loginUser(req,res){
     const {username,email,password} = req.body;
 
     const user = await userModel.findOne({
-        $or:{
-            
-        }
+        $or:[
+            {username},
+            {email}
+        ]
     })
+
+    if(!user){
+        return res.status(401).json({
+            message:"Invalid Credentials"
+        })
+    }
+
+    const isPasswordValid = await bcrypt.compare(password,user.password)
 }
 
 module.exports = { registerUser };
