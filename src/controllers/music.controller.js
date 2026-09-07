@@ -1,4 +1,5 @@
 const musicModel = require("../models/music.models");
+const albumModel = require("../models/album.model")
 const { uploadFile } = require("../services/storage.service");
 const jwt = require("jsonwebtoken");
 
@@ -74,6 +75,8 @@ async function createMusic(req, res) {
         });
     }
 }
+
+
 
 module.exports = {
     createMusic
