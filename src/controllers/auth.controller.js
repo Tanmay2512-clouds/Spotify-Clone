@@ -1,49 +1,51 @@
 const userModel = require('../models/user.model');
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
-async function registerUser(req,res){
-    const{username,email,password,role="user"} = req.body
+async function registerUser(req, res) {
+    const { username, email, password, role = "user" } = req.body;
 
     const isUserAlreadyExist = await userModel.findOne({
-        $or:[
-            {username},
-            {email}
+        $or: [
+            { username },
+            { email }
         ]
+    });
 
-    })
-
-    if(isUserAlreadyExist){
+    if (isUserAlreadyExist) {
         return res.status(409).json({
-            message:"User Already Exists"
-        })
+            message: "User Already Exists"
+        });
     }
 
-    const hash = await bcrypt.hash(password,10)
+    const hash = await bcrypt.hash(password, 10);
 
     const user = await userModel.create({
         username,
         email,
-        password,
+        password: hash, // ✅ store hashed password
         role,
-    })
+    });
 
-    const token = jwt.sign({
-        id:user._id,
-        role:user.role
-    },process.env.JWT_SECRET)
+    const token = jwt.sign(
+        {
+            id: user._id,
+            role: user.role
+        },
+        process.env.JWT_SECRET
+    );
 
-    res.cookies("token",token)
+    res.cookie("token", token);
 
     res.status(201).json({
-        message:"User Registered Successfully ",
-        user:{
-            id:_id,
-            username:user.username,
-            email:user.email,
-            role:user.role
+        message: "User Registered Successfully",
+        user: {
+            id: user._id, // ✅ fixed
+            username: user.username,
+            email: user.email,
+            role: user.role
         }
-    })
+    });
 }
 
-module.exports = {registerUser}
+module.exports = { registerUser };
