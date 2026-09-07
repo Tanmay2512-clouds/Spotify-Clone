@@ -65,6 +65,17 @@ async function loginUser(req,res){
     }
 
     const isPasswordValid = await bcrypt.compare(password,user.password)
+
+    if(!isPasswordValid){
+        return res.status(401).json({
+            message:"Ivalid Credentials"
+        })
+    }
+
+    const token = jwt.sign({
+        id:user._id,
+        role:user.role
+    },process.env.JWT_SECRET)
 }
 
 module.exports = { registerUser };
