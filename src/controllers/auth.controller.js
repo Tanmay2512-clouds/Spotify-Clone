@@ -76,6 +76,18 @@ async function loginUser(req,res){
         id:user._id,
         role:user.role
     },process.env.JWT_SECRET)
+
+    res.cookie("token",token)
+
+    res.status(200).json({
+        message:"User Logged in Successfully",
+        user:{
+            id:user._id,
+            username:user.username,
+            email:user.email,
+            role:user.role,
+        }
+    })
 }
 
-module.exports = { registerUser };
+module.exports = { registerUser , loginUser };
