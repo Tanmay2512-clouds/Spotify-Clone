@@ -10,4 +10,7 @@ async function uploadFile(file){
         fileName:"music_"+Date.now(),
         folder:"yt-complete-backend/music"
     })
+    return result;
 }
+
+module.exports = {uploadFile}
