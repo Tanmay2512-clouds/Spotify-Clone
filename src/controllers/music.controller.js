@@ -41,6 +41,5 @@ async function createMusic(req,res) {
             artist:music.artist
         }
     })
-
-    
 }
+module.exports = {createMusic}
