@@ -51,6 +51,12 @@ async function registerUser(req, res) {
 async function loginUser(req, res) {
     const { username, email, password } = req.body;
 
+    if ((!username && !email) || !password) {
+        return res.status(400).json({
+            message: "Username or email and password are required"
+        });
+    }
+
     const user = await userModel.findOne({
         $or: [
             { username },
