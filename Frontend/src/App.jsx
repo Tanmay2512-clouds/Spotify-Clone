@@ -24,6 +24,10 @@ function App() {
     event.preventDefault()
     const mode = authMode
     const payload = Object.fromEntries(new FormData(event.currentTarget).entries())
+    if (mode === 'login' && payload.username?.includes('@')) {
+      payload.email = payload.username
+      delete payload.username
+    }
     try {
       const response = await fetch(`${API_URL}/auth/${mode}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify(payload) })
       const data = await response.json()
@@ -48,7 +52,7 @@ function App() {
     <main className="main-content">
       <header className="topbar"><button className="mobile-menu" title="Open menu"><Menu size={21} /></button><div className="search-box"><Search size={17} /><input placeholder="What are you in the mood for?" aria-label="Search music" /><kbd>/</kbd></div><div className="top-actions">{!user ? <><button className="text-button" onClick={() => setAuthMode('login')}>Log in</button><button className="pill-button" onClick={() => setAuthMode('register')}>Join free <Sparkles size={14} /></button></> : <button className="profile-chip" onClick={() => { localStorage.removeItem('sonora-user'); setUser(null) }}><span>{user.username?.slice(0, 1).toUpperCase()}</span>{user.username}<ChevronDown size={14} /></button>}</div></header>
       <div className="content-wrap">
-        {activeTab === 'home' && <HomeView user={user} playTrack={playTrack} onArtist={() => setActiveTab('artist')} />}
+        {activeTab === 'home' && <HomeView user={user} playTrack={playTrack} onArtist={() => { if (!user) return showToast('Log in first to open artist tools.'); if (user.role !== 'artist') return showToast('Artist access is required for these tools.'); setActiveTab('artist') }} />}
         {activeTab === 'discover' && <DiscoverView playTrack={playTrack} />}
         {activeTab === 'radio' && <RadioView playTrack={playTrack} />}
         {activeTab === 'artist' && <ArtistView showToast={showToast} />}
