@@ -76,6 +76,10 @@ async function createMusic(req, res) {
     }
 }
 
+async function createAlbum(req,res){
+    
+}
+
 
 
 module.exports = {
