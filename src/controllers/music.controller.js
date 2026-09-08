@@ -82,40 +82,57 @@ async function createAlbum(req,res){
     if(!token){
         return res.status(401).json({message:"Unauthorized"})
     }
+
+    let decoded;
     try{
-        
-        const decoded = jwt.verify(token,process.env.JWT_SECRET)
-        if(!decoded.role!=="artist"){
-            return res.status(403).json({message:"You don't have access to create Album"})
-        }
+        decoded = jwt.verify(token,process.env.JWT_SECRET)
+    } catch(err) {
+        return res.status(401).json({message:"Unauthorized"})
+    }
 
-        const {title,musicIds}= req.body
+    if(decoded.role !== "artist"){
+        return res.status(403).json({message:"You don't have access to create Album"})
+    }
 
+    const {title, musicIds, musics} = req.body;
+    const selectedMusicIds = musicIds ?? musics;
+
+    if(!title || !Array.isArray(selectedMusicIds)){
+        return res.status(400).json({
+            message:"Title and musicIds array are required"
+        });
+    }
+
+    try{
         const album = await albumModel.create({
             title,
             artist:decoded.id,
-            musics:musicIds
-        })
+            musics:selectedMusicIds
+        });
 
-        res.status(201).json({
+        return res.status(201).json({
             message:"Album Created Successfully",
             album:{
                 id:album._id,
                 title:album.title,
                 artist:album.artist,
-                music:album.musics,
+                musics:album.musics,
             }
-        })
-
-    }catch(err){
-        console.error(err)
-        return res.status(401).json({message:"Unauthorized"})
+        });
+    } catch(err){
+        console.error("CREATE ALBUM ERROR:", err);
+        const statusCode = err.name === "ValidationError" || err.name === "CastError" ? 400 : 500;
+        return res.status(statusCode).json({
+            message:"Failed to create album",
+            error:err.message
+        });
     }
 }
 
 
 
 module.exports = {
-    createMusic
+    createMusic,
+    createAlbum
 };
 
