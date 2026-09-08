@@ -2,9 +2,15 @@
 
 A Spotify-inspired project.
 
-This repository is ready for development. The project folder is currently
-empty; application code and setup instructions will be added as the clone is
-built.
+The backend lives in the `Backend` folder.
+
+## Backend
+
+```bash
+cd Backend
+npm install
+node server.js
+```
 
 ## License
 
